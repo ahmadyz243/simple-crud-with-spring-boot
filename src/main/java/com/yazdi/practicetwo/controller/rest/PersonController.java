@@ -66,4 +66,12 @@ public class PersonController {
         return new ResponseEntity<>(dtoResponses, HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/search")
+    public ResponseEntity<List<PersonDtoResponse>> search(@RequestBody PersonDtoRequest dtoRequest){
+        List<Person> people = service.search(dtoRequest);
+        List<PersonDtoResponse> dtoResponses = new ArrayList<>();
+        people.forEach(person -> dtoResponses.add(mapper.personToPersonDtoResponse(person)));
+        return new ResponseEntity<>(dtoResponses, HttpStatus.ACCEPTED);
+    }
+
 }

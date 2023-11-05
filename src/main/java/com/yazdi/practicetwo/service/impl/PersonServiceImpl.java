@@ -2,10 +2,13 @@ package com.yazdi.practicetwo.service.impl;
 
 import com.yazdi.practicetwo.domain.Address;
 import com.yazdi.practicetwo.domain.Person;
+import com.yazdi.practicetwo.dto.request.PersonDtoRequest;
 import com.yazdi.practicetwo.exceptions.PersonNotExistsException;
 import com.yazdi.practicetwo.repository.PersonRepository;
 import com.yazdi.practicetwo.service.PersonService;
+import com.yazdi.practicetwo.specification.PersonSpecifications;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,4 +63,23 @@ public class PersonServiceImpl implements PersonService {
     public boolean existsById(long personId) {
         return repository.existsById(personId);
     }
+
+    @Override
+    public List<Person> search(PersonDtoRequest dto) {
+
+        Specification<Person> ps = Specification.where(null);
+
+        if(dto.getFirstName() != null && !dto.getFirstName().isEmpty())
+            ps = ps.and(PersonSpecifications.hasFirstname(dto.getFirstName()));
+
+        if(dto.getLastname() != null && !dto.getLastname().isEmpty())
+            ps = ps.and(PersonSpecifications.hasLastname(dto.getLastname()));
+
+        if (dto.getBirthDate() != null && !dto.getBirthDate().isEmpty())
+            ps = ps.and(PersonSpecifications.hasBirthday(dto.getBirthDate()));
+
+        return repository.findAll(ps);
+
+    }
+
 }
