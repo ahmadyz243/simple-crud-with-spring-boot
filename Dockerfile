@@ -1,7 +1,10 @@
 # Use the official OpenJDK 17 as the base image
-FROM openjdk:17-jdk-alpine AS build
+FROM openjdk:17-jdk AS build
 WORKDIR /app
 COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
+RUN chmod +x mvnw
 RUN ./mvnw dependency:go-offline
 COPY src src
 RUN ./mvnw package
