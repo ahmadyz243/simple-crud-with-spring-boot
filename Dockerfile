@@ -1,13 +1,13 @@
-# Use the official maven/Java 17 image to create a build artifact
-FROM maven:3.8.4-openjdk-17 AS build
+# Use the official OpenJDK 17 as the base image
+FROM openjdk:17-jdk-alpine AS build
 WORKDIR /app
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN ./mvnw dependency:go-offline
 COPY src src
-RUN mvn package
+RUN ./mvnw package
 
 # Use AdoptOpenJDK 17 as the base image
-FROM adoptopenjdk:17-jre-hotspot
+FROM openjdk:17-jdk-alpine
 COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8081
+EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app.jar"]
