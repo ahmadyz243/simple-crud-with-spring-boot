@@ -59,9 +59,7 @@ public class PersonController {
     public ResponseEntity<List<PersonDtoResponse>> getAll(){
         List<Person> people = service.getAll();
         List<PersonDtoResponse> dtoResponses = new ArrayList<>();
-        people.forEach(person -> {
-            dtoResponses.add(mapper.personToPersonDtoResponse(person));
-        });
+        people.forEach(person -> dtoResponses.add(mapper.personToPersonDtoResponse(person)));
         logger.info("getting people info");
         return new ResponseEntity<>(dtoResponses, HttpStatus.ACCEPTED);
     }
@@ -72,6 +70,11 @@ public class PersonController {
         List<PersonDtoResponse> dtoResponses = new ArrayList<>();
         people.forEach(person -> dtoResponses.add(mapper.personToPersonDtoResponse(person)));
         return new ResponseEntity<>(dtoResponses, HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test(){
+        return new ResponseEntity<>("this is a test", HttpStatus.ACCEPTED);
     }
 
 }
